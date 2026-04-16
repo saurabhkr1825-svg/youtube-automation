@@ -4,7 +4,7 @@ from pydrive2.drive import GoogleDrive
 def connect_drive():
     gauth = GoogleAuth()
     gauth.LoadClientConfigFile("credentials/drive.json")
-    gauth.LocalWebserverAuth()
+    gauth.CommandLineAuth()
     return GoogleDrive(gauth)
 
 def list_files(drive, folder_id):

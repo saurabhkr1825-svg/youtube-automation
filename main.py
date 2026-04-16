@@ -1,8 +1,10 @@
 import os
-from drive import connect_drive, list_files, download_file
+from drive import connect_drive, list_files, download_file, download_secrets
 from metadata import generate_metadata
 from uploader import upload_video
 from database import is_uploaded, mark_uploaded
+
+SECRETS_FOLDER = "1suyqfZ2b2ALndiGvPPz3_xccwstQYOcX"
 
 # One credentials file
 CREDS = "credentials/channel1.json"
@@ -46,6 +48,7 @@ CHANNELS = {
 if __name__ == "__main__":
 
     drive = connect_drive()
+    download_secrets(drive, SECRETS_FOLDER)
 
     for channel, data in CHANNELS.items():
 
