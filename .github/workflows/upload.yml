@@ -24,4 +24,5 @@ jobs:
       - name: Run script
         env:
           DRIVE_CREDENTIALS: ${{ secrets.DRIVE_CREDENTIALS }}
+          DRIVE_TOKEN: ${{ secrets.DRIVE_TOKEN }}
         run: python main.py

@@ -4,6 +4,7 @@ from pydrive2.drive import GoogleDrive
 
 def connect_drive():
     credentials_path = "credentials/drive.json"
+    token_path = "credentials/drive_token.json"
     
     if not os.path.exists(credentials_path):
         env_creds = os.environ.get("DRIVE_CREDENTIALS")
@@ -14,9 +15,26 @@ def connect_drive():
         else:
             print("Warning: credentials/drive.json not found and DRIVE_CREDENTIALS env var is not set.")
 
+    if not os.path.exists(token_path):
+        env_token = os.environ.get("DRIVE_TOKEN")
+        if env_token:
+            os.makedirs("credentials", exist_ok=True)
+            with open(token_path, "w") as f:
+                f.write(env_token)
+
     gauth = GoogleAuth()
     gauth.LoadClientConfigFile(credentials_path)
-    gauth.CommandLineAuth()
+    
+    gauth.LoadCredentialsFile(token_path)
+    if gauth.credentials is None:
+        gauth.CommandLineAuth()
+    elif gauth.access_token_expired:
+        gauth.Refresh()
+    else:
+        gauth.Authorize()
+        
+    gauth.SaveCredentialsFile(token_path)
+    
     return GoogleDrive(gauth)
 
 def list_files(drive, folder_id):
